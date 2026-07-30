@@ -1,0 +1,4 @@
+{
+  "extends": "@majin/tsconfig/react-lib.json",
+  "include": ["src"]
+}

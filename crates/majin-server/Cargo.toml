@@ -1,0 +1,35 @@
+[package]
+name = "majin-server"
+description = "HTTP + WebSocket server that exposes a PTY to the browser"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+# The crate is `majin-server` because it is the server half of the project, but
+# the command people actually type is just `majin`.
+[[bin]]
+name = "majin"
+path = "src/main.rs"
+
+[dependencies]
+majin-protocol = { workspace = true }
+majin-pty = { workspace = true }
+
+anyhow = { workspace = true }
+axum = { version = "0.8", features = ["ws"] }
+base64 = "0.23"
+clap = { version = "4", features = ["derive", "env"] }
+futures-util = "0.3"
+getrandom = "0.4"
+mime_guess = "2"
+rust-embed = "8"
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = "0.11"
+subtle = "2"
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "sync", "signal", "time", "net"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }

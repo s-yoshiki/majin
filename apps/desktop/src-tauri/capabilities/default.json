@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Core permissions for the main window. The PTY is reached through this app's own commands, so no plugin permissions are needed.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

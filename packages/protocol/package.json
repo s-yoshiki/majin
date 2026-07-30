@@ -1,0 +1,18 @@
+{
+  "name": "@majin/protocol",
+  "version": "0.2.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Shared wire protocol and transport abstraction for majin",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@majin/tsconfig": "workspace:*",
+    "typescript": "^7.0.2"
+  }
+}

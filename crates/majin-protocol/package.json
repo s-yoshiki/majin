@@ -1,0 +1,11 @@
+{
+  "name": "@majin/protocol-rs",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Turbo wrapper around the majin-protocol crate",
+  "scripts": {
+    "generate": "cargo run -q -p majin-protocol --bin export-bindings && biome format --write ../../packages/protocol/src/generated",
+    "typecheck": "cargo check -p majin-protocol",
+    "clean": "cargo clean -p majin-protocol"
+  }
+}

@@ -1,0 +1,218 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to build and publish (e.g. v0.2.0)'
+        required: true
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # --- Web: one self-contained binary per platform --------------------------
+  server:
+    name: server (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            archive: tar.gz
+          - os: ubuntu-22.04
+            target: aarch64-unknown-linux-gnu
+            archive: tar.gz
+            cross: true
+          - os: macos-14
+            target: aarch64-apple-darwin
+            archive: tar.gz
+          - os: macos-13
+            target: x86_64-apple-darwin
+            archive: tar.gz
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+
+      # The server has no C dependencies, so an ARM64 build only needs a
+      # cross linker — much more reliable than depending on ARM runners.
+      - name: Install the aarch64 cross linker
+        if: matrix.cross
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc-aarch64-linux-gnu
+          echo 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc' >> "$GITHUB_ENV"
+
+      - run: pnpm install --frozen-lockfile
+
+      # Must precede the Rust build: rust-embed bakes apps/web/dist into the
+      # binary at compile time.
+      - name: Build the frontend
+        run: pnpm --filter @majin/web build
+
+      - name: Build the server
+        run: cargo build --release -p majin --target ${{ matrix.target }}
+
+      - name: Package (tar.gz)
+        if: matrix.archive == 'tar.gz'
+        shell: bash
+        run: |
+          VERSION="${{ inputs.tag || github.ref_name }}"
+          VERSION="${VERSION#v}"
+          mkdir -p dist
+          tar czf "dist/majin-${VERSION}-${{ matrix.target }}.tar.gz" \
+            -C "target/${{ matrix.target }}/release" majin
+
+      - name: Package (zip)
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: |
+          $version = "${{ inputs.tag || github.ref_name }}" -replace '^v', ''
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Compress-Archive `
+            -Path "target/${{ matrix.target }}/release/majin.exe" `
+            -DestinationPath "dist/majin-$version-${{ matrix.target }}.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+
+  # --- Desktop: platform installers -----------------------------------------
+  desktop:
+    name: desktop (${{ matrix.label }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            label: aarch64-apple-darwin
+          - os: macos-13
+            label: x86_64-apple-darwin
+          - os: ubuntu-22.04
+            label: x86_64-unknown-linux-gnu
+          - os: windows-latest
+            label: x86_64-pc-windows-msvc
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - name: Install Tauri system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev \
+            libayatana-appindicator3-dev patchelf
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: desktop-${{ matrix.label }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build the desktop bundles
+        run: pnpm run build:desktop
+
+      # Bundle layout differs per platform, so gather whatever was produced
+      # rather than guessing at paths.
+      - name: Collect installers
+        shell: bash
+        run: |
+          mkdir -p dist
+          find target/release/bundle \
+            \( -name '*.dmg' -o -name '*.msi' -o -name '*-setup.exe' \
+               -o -name '*.AppImage' -o -name '*.deb' -o -name '*.rpm' \) \
+            -type f -exec cp {} dist/ \;
+          ls -la dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.label }}
+          path: dist/*
+          if-no-files-found: error
+
+  # --- Publish ---------------------------------------------------------------
+  publish:
+    name: Publish release
+    needs: [server, desktop]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: List what will be published
+        run: ls -la artifacts
+
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          NOTES=$(cat <<'EOF'
+          ## Downloads
+
+          **Web server** — one self-contained binary with the UI compiled in. No
+          runtime dependencies. Extract it and run it; it prints a sign-in link
+          with a freshly generated access token.
+
+          **Desktop** — installs a normal application that talks to a local PTY
+          over IPC. Nothing listens on a port. The builds are unsigned, so macOS
+          and Windows will both want confirmation on first launch.
+
+          Read the [security notes](https://s-yoshiki.github.io/majin/security.html)
+          before exposing the server to anything beyond loopback.
+          EOF
+          )
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" artifacts/* --clobber
+          else
+            gh release create "$TAG" artifacts/* \
+              --title "$TAG" \
+              --notes "$NOTES" \
+              --verify-tag
+          fi

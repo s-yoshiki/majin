@@ -1,0 +1,15 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  - 'configs/*'
+  # Thin package.json wrappers around cargo, so turbo can schedule Rust builds
+  # in the same task graph as the TypeScript ones.
+  - 'crates/*'
+
+minimumReleaseAgeExclude:
+  - '@vitejs/plugin-react@6.0.5'
+  - vite@8.2.0
+
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+  - esbuild

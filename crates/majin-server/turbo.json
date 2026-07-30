@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      // Cargo writes to the workspace-root target directory, outside this
+      // package, and keeps its own incremental cache there.
+      "outputs": [],
+      "cache": false
+    }
+  }
+}

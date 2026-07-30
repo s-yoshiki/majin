@@ -1,0 +1,39 @@
+{
+  "name": "majin",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Browser and desktop terminal powered by xterm.js, WebSocket and PTY",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/s-yoshiki/majin.git"
+  },
+  "packageManager": "pnpm@11.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "turbo run dev --filter=@majin/web --filter=@majin/server",
+    "dev:desktop": "turbo run dev --filter=@majin/desktop",
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=@majin/server",
+    "build:desktop": "turbo run build --filter=@majin/desktop",
+    "typecheck": "turbo run typecheck",
+    "lint": "biome check . && cargo clippy --workspace --all-targets -- -D warnings",
+    "lint:js": "biome check .",
+    "lint:rust": "cargo clippy --workspace --all-targets -- -D warnings",
+    "lint:fix": "biome check --write . && cargo clippy --workspace --fix --allow-dirty",
+    "format": "biome format --write . && cargo fmt --all",
+    "format:check": "biome format . && cargo fmt --all --check",
+    "generate:protocol": "turbo run generate --filter=@majin/protocol-rs",
+    "test": "cargo test --workspace",
+    "test:e2e": "node scripts/smoke-test.mjs",
+    "clean": "turbo run clean && cargo clean"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.6",
+    "@majin/biome-config": "workspace:*",
+    "turbo": "^2.10.7",
+    "typescript": "^7.0.2"
+  }
+}

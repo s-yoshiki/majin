@@ -1,0 +1,4 @@
+{
+  "extends": "@majin/tsconfig/react-app.json",
+  "include": ["src", "vite.config.ts", "scripts"]
+}

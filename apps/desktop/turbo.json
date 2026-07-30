@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      // Bundles land in the shared Cargo target directory at the repo root,
+      // which is outside this package, so turbo cannot cache them.
+      "outputs": [],
+      "cache": false
+    }
+  }
+}

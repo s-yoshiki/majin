@@ -1,0 +1,10 @@
+{
+  "name": "@majin/pty-rs",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Turbo wrapper around the majin-pty crate",
+  "scripts": {
+    "typecheck": "cargo check -p majin-pty",
+    "clean": "cargo clean -p majin-pty"
+  }
+}

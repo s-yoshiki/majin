@@ -1,0 +1,111 @@
+:root {
+  --bg: #11141a;
+  --bg-raised: #171b23;
+  --border: #262c38;
+  --fg: #d7dae0;
+  --fg-muted: #8b93a7;
+  --accent: #7aa2f7;
+  --danger: #f7768e;
+  --ok: #9ece6a;
+  --warn: #e0af68;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* The webview should never scroll; the terminal owns its own scrollback. */
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  flex: 0 0 auto;
+  /* Clear of the overlaid traffic lights on macOS. */
+  padding: 0 12px 0 78px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  user-select: none;
+}
+
+.titlebar__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg-muted);
+}
+
+.titlebar__dot--open {
+  background: var(--ok);
+}
+
+.titlebar__dot--connecting {
+  background: var(--warn);
+}
+
+.titlebar__dot--error,
+.titlebar__dot--closed {
+  background: var(--danger);
+}
+
+.titlebar__title {
+  font-family: ui-monospace, monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app__terminal {
+  flex: 1;
+  min-height: 0;
+  padding: 8px 10px;
+}
+
+.restart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  padding: 10px;
+  background: var(--bg-raised);
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+}
+
+.restart button {
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #0d1017;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 12px;
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@majin/server",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Turbo wrapper around the majin-server crate",
+  "scripts": {
+    "build": "cargo build --release -p majin-server",
+    "dev": "cargo run -p majin-server -- --allowed-origin http://localhost:5173",
+    "typecheck": "cargo check -p majin-server",
+    "clean": "cargo clean -p majin-server"
+  },
+  "devDependencies": {
+    "@majin/web": "workspace:*"
+  }
+}

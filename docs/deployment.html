@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deploying the web build — majin</title>
+    <meta
+      name="description"
+      content="Running the majin server binary: systemd, a reverse proxy with TLS and WebSocket support, Docker, and building from source."
+    />
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site">
+      <aside class="sidebar">
+        <a class="brand" href="index.html">majin <span>v0.2</span></a>
+        <nav>
+          <h2>Guide</h2>
+          <ul>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="development.html">Development</a></li>
+            <li><a href="deployment.html" aria-current="page">Deploying the web build</a></li>
+            <li><a href="desktop.html">Desktop build</a></li>
+          </ul>
+          <h2>Reference</h2>
+          <ul>
+            <li><a href="architecture.html">Architecture</a></li>
+            <li><a href="protocol.html">Wire protocol</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="configuration.html">Configuration</a></li>
+          </ul>
+          <h2>Project</h2>
+          <ul>
+            <li><a href="https://github.com/s-yoshiki/majin">GitHub</a></li>
+            <li><a href="https://github.com/s-yoshiki/majin/releases">Releases</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="content" id="main">
+        <h1>Deploying the web build</h1>
+        <p class="lede">
+          The release artifact is one executable with the React app compiled into it. Copy it and
+          run it.
+        </p>
+
+        <div class="danger">
+          <strong>Read this first</strong>
+          <p>
+            You are deploying remote shell access. Work through the
+            <a href="security.html">Security</a> page before it is reachable from anywhere but
+            loopback.
+          </p>
+        </div>
+
+        <h2>Getting the binary</h2>
+        <p>
+          Download the archive for your platform from
+          <a href="https://github.com/s-yoshiki/majin/releases">Releases</a>:
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Asset</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Linux x86-64</td>
+                <td><code>majin-&lt;version&gt;-x86_64-unknown-linux-gnu.tar.gz</code></td>
+              </tr>
+              <tr>
+                <td>Linux ARM64</td>
+                <td><code>majin-&lt;version&gt;-aarch64-unknown-linux-gnu.tar.gz</code></td>
+              </tr>
+              <tr>
+                <td>macOS Apple silicon</td>
+                <td><code>majin-&lt;version&gt;-aarch64-apple-darwin.tar.gz</code></td>
+              </tr>
+              <tr>
+                <td>macOS Intel</td>
+                <td><code>majin-&lt;version&gt;-x86_64-apple-darwin.tar.gz</code></td>
+              </tr>
+              <tr>
+                <td>Windows x86-64</td>
+                <td><code>majin-&lt;version&gt;-x86_64-pc-windows-msvc.zip</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <pre><code>tar xzf majin-0.2.0-x86_64-unknown-linux-gnu.tar.gz
+sudo install -m 0755 majin /usr/local/bin/</code></pre>
+
+        <h3>Or build it</h3>
+        <pre><code>pnpm install
+pnpm build:web
+# → target/release/majin</code></pre>
+        <p>
+          The frontend must be built first so <code>rust-embed</code> can find it;
+          <code>pnpm build:web</code> handles that ordering. Building the Rust server alone with
+          <code>cargo build --release -p majin-server</code> will produce a binary that serves
+          nothing, and says so at startup.
+        </p>
+
+        <h2>Running it as a service</h2>
+        <p>
+          A dedicated unprivileged user, a fixed token, and loopback only — with TLS terminated by
+          a proxy in front.
+        </p>
+        <pre><code>sudo useradd --system --create-home --shell /bin/bash majin
+sudo install -d -o majin -g majin /etc/majin
+printf 'MAJIN_TOKEN=%s\n' "$(openssl rand -hex 24)" | sudo tee /etc/majin/env &gt;/dev/null
+sudo chmod 600 /etc/majin/env
+sudo chown majin:majin /etc/majin/env</code></pre>
+
+        <p><code>/etc/systemd/system/majin.service</code>:</p>
+        <pre><code>[Unit]
+Description=majin terminal server
+After=network.target
+
+[Service]
+User=majin
+EnvironmentFile=/etc/majin/env
+Environment=MAJIN_HOST=127.0.0.1
+Environment=MAJIN_PORT=8999
+Environment=MAJIN_SECURE_COOKIE=1
+ExecStart=/usr/local/bin/majin
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+        <pre><code>sudo systemctl daemon-reload
+sudo systemctl enable --now majin
+sudo systemctl status majin</code></pre>
+
+        <div class="note">
+          <strong>Restarts end sessions</strong>
+          <p>
+            Sessions are held in memory, so everyone signs in again after a restart. Shells are
+            killed too — they are children of the server process.
+          </p>
+        </div>
+
+        <h2>Reverse proxy</h2>
+        <p>
+          The proxy must forward WebSocket upgrades and pass <code>X-Forwarded-Proto</code>, which
+          is how the server decides to mark the session cookie <code>Secure</code>.
+        </p>
+
+        <h3>Caddy</h3>
+        <pre><code>majin.example.com {
+    reverse_proxy 127.0.0.1:8999
+}</code></pre>
+        <p>Caddy handles certificates, upgrades and forwarded headers with no further configuration.</p>
+
+        <h3>nginx</h3>
+        <pre><code>server {
+    listen 443 ssl http2;
+    server_name majin.example.com;
+
+    ssl_certificate     /etc/letsencrypt/live/majin.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/majin.example.com/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:8999;
+        proxy_http_version 1.1;
+
+        # Without these two the WebSocket upgrade fails and the terminal
+        # never connects.
+        proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_set_header Host              $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP         $remote_addr;
+
+        # A terminal can idle for a long time between keystrokes.
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+    }
+}</code></pre>
+
+        <div class="warn">
+          <strong>Keep the Host header intact</strong>
+          <p>
+            The origin check compares the request's <code>Origin</code> against its
+            <code>Host</code>. A proxy that rewrites <code>Host</code> to
+            <code>127.0.0.1:8999</code> will make every browser connection look cross-origin and
+            get closed with 4001. Either preserve <code>Host</code>, or list the public origin in
+            <code>MAJIN_ALLOWED_ORIGINS</code>.
+          </p>
+        </div>
+
+        <h2>Docker</h2>
+        <p>
+          There is no published image; the binary is static enough that one is rarely worth it.
+          If you want one:
+        </p>
+        <pre><code>FROM debian:bookworm-slim
+RUN apt-get update \
+ &amp;&amp; apt-get install -y --no-install-recommends ca-certificates bash \
+ &amp;&amp; rm -rf /var/lib/apt/lists/* \
+ &amp;&amp; useradd --create-home --shell /bin/bash majin
+
+COPY majin /usr/local/bin/majin
+
+USER majin
+ENV MAJIN_HOST=0.0.0.0 MAJIN_PORT=8999 MAJIN_SHELL=/bin/bash
+EXPOSE 8999
+CMD ["majin"]</code></pre>
+        <pre><code>docker run --rm -p 8999:8999 -e MAJIN_TOKEN="$(openssl rand -hex 24)" majin</code></pre>
+        <p>
+          <code>MAJIN_HOST=0.0.0.0</code> is correct inside a container — the container boundary is
+          what limits reachability. Publish the port only where you intend it to be reachable.
+        </p>
+
+        <h2>Checking it works</h2>
+        <pre><code>curl -s https://majin.example.com/api/info</code></pre>
+        <pre><code>{"version":"0.2.0","protocolVersion":1,"authRequired":true}</code></pre>
+        <p>
+          <code>authRequired: false</code> here means the server is running with
+          <code>--insecure-no-auth</code> and anyone who can reach it has a shell.
+        </p>
+
+        <h2>When something is wrong</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Symptom</th>
+                <th>Likely cause</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Login works, terminal stays "Reconnecting…"</td>
+                <td>The proxy is not forwarding the WebSocket upgrade.</td>
+              </tr>
+              <tr>
+                <td>Immediately bounced back to the login screen</td>
+                <td>
+                  Origin check failing (rewritten <code>Host</code>), or a <code>Secure</code>
+                  cookie set on a connection the browser sees as plain HTTP.
+                </td>
+              </tr>
+              <tr>
+                <td>"no frontend is embedded in this binary"</td>
+                <td>
+                  Built with <code>cargo</code> directly instead of <code>pnpm build:web</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>Connection drops after a few minutes idle</td>
+                <td>Proxy read timeout too low.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Raise the log level with <code>MAJIN_LOG=majin_server=debug</code>.</p>
+
+        <footer class="page-footer">
+          <span>majin — MIT licensed</span>
+          <a href="https://github.com/s-yoshiki/majin">github.com/s-yoshiki/majin</a>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

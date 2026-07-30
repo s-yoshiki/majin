@@ -1,0 +1,17 @@
+[package]
+name = "majin-pty"
+description = "PTY session management shared by the majin server and desktop app"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+majin-protocol = { workspace = true }
+
+portable-pty = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }

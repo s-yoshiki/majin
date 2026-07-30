@@ -1,0 +1,34 @@
+{
+  "name": "@majin/desktop",
+  "version": "0.2.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Tauri desktop app; talks to a local PTY over IPC instead of a WebSocket",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "dev:vite": "vite",
+    "build:vite": "vite build",
+    "icon": "node scripts/generate-icon.mjs && tauri icon app-icon.png",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@majin/protocol": "workspace:*",
+    "@majin/terminal-ui": "workspace:*",
+    "@tauri-apps/api": "^2.9.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@majin/tsconfig": "workspace:*",
+    "@tauri-apps/cli": "^2.11.4",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.0"
+  }
+}
