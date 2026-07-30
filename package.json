@@ -15,6 +15,9 @@
   "scripts": {
     "dev": "turbo run dev --filter=@majin/web --filter=@majin/server",
     "dev:desktop": "turbo run dev --filter=@majin/desktop",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "build": "turbo run build",
     "build:web": "turbo run build --filter=@majin/server",
     "build:desktop": "turbo run build --filter=@majin/desktop",
@@ -34,6 +37,7 @@
     "@biomejs/biome": "^2.5.6",
     "@majin/biome-config": "workspace:*",
     "turbo": "^2.10.7",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitepress": "^1.6.4"
   }
 }

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" role="img" aria-labelledby="arch-title">
+  <style>
+    .diagram-accent { fill: #e8eefc; stroke: #2e5fd0; }
+    .diagram-bg { fill: #f6f7f9; stroke: #e2e5ea; }
+    .diagram-text { fill: #1c2027; font: 600 15px system-ui, sans-serif; }
+    .diagram-muted { fill: #5c6572; font: 12px ui-monospace, monospace; }
+    .diagram-line { fill: none; stroke: #5c6572; stroke-width: 1.5; }
+
+    @media (prefers-color-scheme: dark) {
+      .diagram-accent { fill: #1b2436; stroke: #7aa2f7; }
+      .diagram-bg { fill: #161a22; stroke: #262c38; }
+      .diagram-text { fill: #d9dde4; }
+      .diagram-muted { fill: #8d96a8; }
+      .diagram-line { stroke: #8d96a8; }
+    }
+  </style>
+            <title id="arch-title">
+              Browser and desktop frontends both reach the majin-pty crate, one through a
+              WebSocket server and one through Tauri IPC.
+            </title>
+
+            <!-- Web column -->
+            <rect class="diagram-accent" x="20" y="20" width="300" height="58" rx="8" />
+            <text class="diagram-text" x="36" y="45">Browser</text>
+            <text class="diagram-muted" x="36" y="64">apps/web — React + xterm.js</text>
+
+            <path class="diagram-line" d="M170 78 L170 128" marker-end="url(#arrow)" />
+            <text class="diagram-muted" x="180" y="108">WebSocket /ws + cookie session</text>
+
+            <rect class="diagram-bg" x="20" y="128" width="300" height="58" rx="8" />
+            <text class="diagram-text" x="36" y="153">majin-server</text>
+            <text class="diagram-muted" x="36" y="172">axum · auth · embedded UI</text>
+
+            <!-- Desktop column -->
+            <rect class="diagram-accent" x="400" y="20" width="300" height="58" rx="8" />
+            <text class="diagram-text" x="416" y="45">Desktop window</text>
+            <text class="diagram-muted" x="416" y="64">apps/desktop — React + xterm.js</text>
+
+            <path class="diagram-line" d="M550 78 L550 128" marker-end="url(#arrow)" />
+            <text class="diagram-muted" x="560" y="108">Tauri IPC</text>
+
+            <rect class="diagram-bg" x="400" y="128" width="300" height="58" rx="8" />
+            <text class="diagram-text" x="416" y="153">majin-desktop</text>
+            <text class="diagram-muted" x="416" y="172">tauri commands + events</text>
+
+            <!-- Shared crate -->
+            <path
+              class="diagram-line"
+              d="M170 186 L170 232 L310 232 L310 262"
+              marker-end="url(#arrow)"
+            />
+            <path
+              class="diagram-line"
+              d="M550 186 L550 232 L410 232 L410 262"
+              marker-end="url(#arrow)"
+            />
+
+            <rect class="diagram-accent" x="200" y="262" width="320" height="58" rx="8" />
+            <text class="diagram-text" x="216" y="287">majin-pty</text>
+            <text class="diagram-muted" x="216" y="306">portable-pty · UTF-8 reassembly</text>
+
+            <path class="diagram-line" d="M360 320 L360 362" marker-end="url(#arrow)" />
+
+            <rect class="diagram-bg" x="200" y="362" width="320" height="48" rx="8" />
+            <text class="diagram-text" x="216" y="391">Your login shell</text>
+
+            <defs>
+              <marker
+                id="arrow"
+                viewBox="0 0 10 10"
+                refX="9"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-line" fill="currentColor" />
+              </marker>
+            </defs>
+</svg>
