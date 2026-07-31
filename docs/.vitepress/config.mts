@@ -5,14 +5,10 @@ export default defineConfig({
   description: 'A terminal in your browser and on your desktop',
   base: '/majin/',
   locales: {
-    root: { label: 'English', lang: 'en-US' },
-    ja: { label: '日本語', lang: 'ja-JP' },
-  },
-  head: [['meta', { name: 'theme-color', content: '#2e5fd0' }]],
-  themeConfig: {
-    logo: undefined,
-    locales: {
-      root: {
+    root: {
+      label: 'English',
+      lang: 'en-US',
+      themeConfig: {
         nav: [
           { text: 'Guide', link: '/' },
           { text: 'Reference', link: '/architecture' },
@@ -46,7 +42,11 @@ export default defineConfig({
           copyright: 'majin',
         },
       },
-      ja: {
+    },
+    ja: {
+      label: '日本語',
+      lang: 'ja-JP',
+      themeConfig: {
         nav: [
           { text: 'ガイド', link: '/ja/' },
           { text: 'リファレンス', link: '/ja/architecture' },
@@ -81,6 +81,10 @@ export default defineConfig({
         },
       },
     },
+  },
+  head: [['meta', { name: 'theme-color', content: '#2e5fd0' }]],
+  themeConfig: {
+    logo: undefined,
     socialLinks: [{ icon: 'github', link: 'https://github.com/s-yoshiki/majin' }],
     search: {
       provider: 'local',
