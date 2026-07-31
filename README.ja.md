@@ -212,14 +212,14 @@ Pull Requestを作成する前に、`pnpm lint`、`pnpm typecheck`、`pnpm test`
 
 | ページ | 内容 |
 | --- | --- |
-| [Overview](https://s-yoshiki.github.io/majin/) | majinの概要と開始方法 |
-| [Development](https://s-yoshiki.github.io/majin/development.html) | モノレポのセットアップと開発フロー |
-| [Deployment](https://s-yoshiki.github.io/majin/deployment.html) | systemd、リバースプロキシ、Docker |
-| [Desktop](https://s-yoshiki.github.io/majin/desktop.html) | デスクトップアプリのインストールとビルド |
-| [Architecture](https://s-yoshiki.github.io/majin/architecture.html) | コンポーネントとデータフロー |
-| [Wire protocol](https://s-yoshiki.github.io/majin/protocol.html) | フレーム、エンドポイント、終了コード |
-| [Security](https://s-yoshiki.github.io/majin/security.html) | 認証と信頼境界 |
-| [Configuration](https://s-yoshiki.github.io/majin/configuration.html) | フラグと環境変数 |
+| [概要](https://s-yoshiki.github.io/majin/ja/) | majinの概要と開始方法 |
+| [開発](https://s-yoshiki.github.io/majin/ja/development.html) | モノレポのセットアップと開発フロー |
+| [デプロイ](https://s-yoshiki.github.io/majin/ja/deployment.html) | systemd、リバースプロキシ、Docker |
+| [デスクトップ版](https://s-yoshiki.github.io/majin/ja/desktop.html) | デスクトップアプリのインストールとビルド |
+| [アーキテクチャ](https://s-yoshiki.github.io/majin/ja/architecture.html) | コンポーネントとデータフロー |
+| [ワイヤープロトコル](https://s-yoshiki.github.io/majin/ja/protocol.html) | フレーム、エンドポイント、終了コード |
+| [セキュリティ](https://s-yoshiki.github.io/majin/ja/security.html) | 認証と信頼境界 |
+| [設定](https://s-yoshiki.github.io/majin/ja/configuration.html) | フラグと環境変数 |
 
 ## ライセンス
 
