@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useId, useState } from 'react';
 
 export interface LoginScreenProps {
   onSubmit: (token: string) => Promise<void>;
@@ -10,6 +10,7 @@ export function LoginScreen({ onSubmit, initialError }: LoginScreenProps) {
   const [token, setToken] = useState('');
   const [error, setError] = useState<string | null>(initialError ?? null);
   const [busy, setBusy] = useState(false);
+  const tokenId = useId();
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -35,11 +36,11 @@ export function LoginScreen({ onSubmit, initialError }: LoginScreenProps) {
           Paste the access token printed by <code>majin-server</code> when it started.
         </p>
 
-        <label className="login__label" htmlFor="token">
+        <label className="login__label" htmlFor={tokenId}>
           Access token
         </label>
         <input
-          id="token"
+          id={tokenId}
           className="login__input"
           type="password"
           value={token}

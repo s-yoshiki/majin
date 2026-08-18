@@ -10,7 +10,6 @@ export function App() {
 
   // One PTY per window; `sessionKey` bumps to start a fresh one after exit.
   const [sessionKey, setSessionKey] = useState(0);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: sessionKey is the restart signal.
   const transport = useMemo(() => new TauriTransport(), [sessionKey]);
 
   useEffect(() => () => transport.dispose(), [transport]);
