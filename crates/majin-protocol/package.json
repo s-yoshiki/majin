@@ -4,7 +4,7 @@
   "private": true,
   "description": "Turbo wrapper around the majin-protocol crate",
   "scripts": {
-    "generate": "cargo run -q -p majin-protocol --bin export-bindings && oxfmt",
+    "generate": "cd ../.. && cargo run -q -p majin-protocol --bin export-bindings && pnpm exec oxfmt --config oxfmt.config.ts packages/protocol/src/generated/protocol.ts",
     "typecheck": "cargo check -p majin-protocol",
     "clean": "cargo clean -p majin-protocol"
   }
