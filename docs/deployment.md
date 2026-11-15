@@ -13,7 +13,7 @@ You are deploying remote shell access. Work through the [Security](./security.md
 Download the archive for your platform from [Releases](https://github.com/s-yoshiki/majin/releases):
 
 | Platform            | Asset                                              |
-|---------------------|----------------------------------------------------|
+| ------------------- | -------------------------------------------------- |
 | Linux x86-64        | `majin-<version>-x86_64-unknown-linux-gnu.tar.gz`  |
 | Linux ARM64         | `majin-<version>-aarch64-unknown-linux-gnu.tar.gz` |
 | macOS Apple silicon | `majin-<version>-aarch64-apple-darwin.tar.gz`      |
@@ -147,11 +147,11 @@ There is no published image; the binary is static enough that one is rarely wort
 
 ## When something is wrong
 
-| Symptom | Likely cause |
-|----|----|
-| Login works, terminal stays "Reconnecting…" | The proxy is not forwarding the WebSocket upgrade. |
+| Symptom                                      | Likely cause                                                                                                      |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Login works, terminal stays "Reconnecting…"  | The proxy is not forwarding the WebSocket upgrade.                                                                |
 | Immediately bounced back to the login screen | Origin check failing (rewritten `Host`), or a `Secure` cookie set on a connection the browser sees as plain HTTP. |
-| "no frontend is embedded in this binary" | Built with `cargo` directly instead of `pnpm build:web`. |
-| Connection drops after a few minutes idle | Proxy read timeout too low. |
+| "no frontend is embedded in this binary"     | Built with `cargo` directly instead of `pnpm build:web`.                                                          |
+| Connection drops after a few minutes idle    | Proxy read timeout too low.                                                                                       |
 
 Raise the log level with `MAJIN_LOG=majin_server=debug`.

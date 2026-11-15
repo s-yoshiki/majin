@@ -34,13 +34,13 @@ or a native [Tauri](https://tauri.app/) desktop app.
 
 ## Choose a build
 
-| | Web server | Desktop app |
-| --- | --- | --- |
-| Best for | Reaching a shell from a browser | A local terminal in a native window |
-| Transport | HTTP + WebSocket | Tauri IPC |
-| Network listener | `127.0.0.1:8999` by default | None |
-| Authentication | Access token exchanged for a session cookie | Not needed |
-| Distribution | One binary with the web UI embedded | `.dmg`, `.msi`, `.AppImage` and other platform packages |
+|                  | Web server                                  | Desktop app                                             |
+| ---------------- | ------------------------------------------- | ------------------------------------------------------- |
+| Best for         | Reaching a shell from a browser             | A local terminal in a native window                     |
+| Transport        | HTTP + WebSocket                            | Tauri IPC                                               |
+| Network listener | `127.0.0.1:8999` by default                 | None                                                    |
+| Authentication   | Access token exchanged for a session cookie | Not needed                                              |
+| Distribution     | One binary with the web UI embedded         | `.dmg`, `.msi`, `.AppImage` and other platform packages |
 
 ## Quick start
 
@@ -93,11 +93,11 @@ confirm the first launch.
 
 You need:
 
-| Tool | Version |
-| --- | --- |
-| Node.js | 20+ |
-| pnpm | 11+ |
-| Rust | 1.86+ |
+| Tool    | Version |
+| ------- | ------- |
+| Node.js | 20+     |
+| pnpm    | 11+     |
+| Rust    | 1.86+   |
 
 ```bash
 git clone https://github.com/s-yoshiki/majin.git
@@ -126,15 +126,15 @@ platform packages, generated protocol types and the full development workflow.
 Every server option is available as both a command-line flag and an environment
 variable. Flags take precedence.
 
-| Flag | Environment variable | Default | Purpose |
-| --- | --- | --- | --- |
-| `--host` | `MAJIN_HOST` | `127.0.0.1` | Bind address |
-| `--port`, `-p` | `MAJIN_PORT` | `8999` | Listening port |
-| `--token` | `MAJIN_TOKEN` | Generated | Access token |
-| `--shell` | `MAJIN_SHELL` | `$SHELL` / `%COMSPEC%` | Shell executable |
-| `--cwd` | `MAJIN_CWD` | User home | Initial working directory |
-| `--max-sessions` | `MAJIN_MAX_SESSIONS` | `8` | Concurrent terminal limit |
-| `--session-ttl-minutes` | `MAJIN_SESSION_TTL_MINUTES` | `720` | Session lifetime |
+| Flag                    | Environment variable        | Default                | Purpose                   |
+| ----------------------- | --------------------------- | ---------------------- | ------------------------- |
+| `--host`                | `MAJIN_HOST`                | `127.0.0.1`            | Bind address              |
+| `--port`, `-p`          | `MAJIN_PORT`                | `8999`                 | Listening port            |
+| `--token`               | `MAJIN_TOKEN`               | Generated              | Access token              |
+| `--shell`               | `MAJIN_SHELL`               | `$SHELL` / `%COMSPEC%` | Shell executable          |
+| `--cwd`                 | `MAJIN_CWD`                 | User home              | Initial working directory |
+| `--max-sessions`        | `MAJIN_MAX_SESSIONS`        | `8`                    | Concurrent terminal limit |
+| `--session-ttl-minutes` | `MAJIN_SESSION_TTL_MINUTES` | `720`                  | Session lifetime          |
 
 The [configuration reference](https://s-yoshiki.github.io/majin/configuration.html)
 also covers allowed origins, secure cookies, logging and authentication options.
@@ -180,7 +180,7 @@ apps/
 packages/
 ├── protocol/          Generated types and transport implementations
 └── terminal-ui/       Shared xterm.js React component
-configs/               Shared TypeScript and Biome configuration
+configs/               Shared TypeScript and Oxlint / Oxfmt configuration
 docs/                  VitePress documentation site
 ```
 
@@ -190,17 +190,17 @@ for the details.
 
 ## Development commands
 
-| Command | What it does |
-| --- | --- |
-| `pnpm dev` | Run the Rust server and Vite web app |
-| `pnpm dev:desktop` | Run the Tauri app with frontend hot reload |
-| `pnpm build:web` | Build the frontend and the server binary that embeds it |
-| `pnpm build:desktop` | Build platform installers in `target/release/bundle/` |
-| `pnpm lint` | Run Biome and Clippy with warnings denied |
-| `pnpm typecheck` | Type-check every TypeScript package and Rust crate |
-| `pnpm test` | Run the Rust workspace tests, including real-PTY tests |
-| `pnpm test:e2e` | Test authentication, WebSocket transport and a shell end to end |
-| `pnpm generate:protocol` | Regenerate TypeScript protocol types from Rust |
+| Command                  | What it does                                                    |
+| ------------------------ | --------------------------------------------------------------- |
+| `pnpm dev`               | Run the Rust server and Vite web app                            |
+| `pnpm dev:desktop`       | Run the Tauri app with frontend hot reload                      |
+| `pnpm build:web`         | Build the frontend and the server binary that embeds it         |
+| `pnpm build:desktop`     | Build platform installers in `target/release/bundle/`           |
+| `pnpm lint`              | Run Oxlint / Oxfmt and Clippy with warnings denied              |
+| `pnpm typecheck`         | Type-check every TypeScript package and Rust crate              |
+| `pnpm test`              | Run the Rust workspace tests, including real-PTY tests          |
+| `pnpm test:e2e`          | Test authentication, WebSocket transport and a shell end to end |
+| `pnpm generate:protocol` | Regenerate TypeScript protocol types from Rust                  |
 
 Before opening a pull request, run `pnpm lint`, `pnpm typecheck` and
 `pnpm test`. If you change `crates/majin-protocol`, regenerate and commit the
@@ -208,16 +208,16 @@ TypeScript types as well.
 
 ## Documentation
 
-| Page | Contents |
-| --- | --- |
-| [Overview](https://s-yoshiki.github.io/majin/) | What majin is and how to start |
-| [Development](https://s-yoshiki.github.io/majin/development.html) | Monorepo setup and development loops |
-| [Deployment](https://s-yoshiki.github.io/majin/deployment.html) | systemd, reverse proxies and Docker |
-| [Desktop](https://s-yoshiki.github.io/majin/desktop.html) | Installing and building the desktop app |
-| [Architecture](https://s-yoshiki.github.io/majin/architecture.html) | Components and data flow |
-| [Wire protocol](https://s-yoshiki.github.io/majin/protocol.html) | Frames, endpoints and close codes |
-| [Security](https://s-yoshiki.github.io/majin/security.html) | Authentication and trust boundaries |
-| [Configuration](https://s-yoshiki.github.io/majin/configuration.html) | Flags and environment variables |
+| Page                                                                  | Contents                                |
+| --------------------------------------------------------------------- | --------------------------------------- |
+| [Overview](https://s-yoshiki.github.io/majin/)                        | What majin is and how to start          |
+| [Development](https://s-yoshiki.github.io/majin/development.html)     | Monorepo setup and development loops    |
+| [Deployment](https://s-yoshiki.github.io/majin/deployment.html)       | systemd, reverse proxies and Docker     |
+| [Desktop](https://s-yoshiki.github.io/majin/desktop.html)             | Installing and building the desktop app |
+| [Architecture](https://s-yoshiki.github.io/majin/architecture.html)   | Components and data flow                |
+| [Wire protocol](https://s-yoshiki.github.io/majin/protocol.html)      | Frames, endpoints and close codes       |
+| [Security](https://s-yoshiki.github.io/majin/security.html)           | Authentication and trust boundaries     |
+| [Configuration](https://s-yoshiki.github.io/majin/configuration.html) | Flags and environment variables         |
 
 ## License
 

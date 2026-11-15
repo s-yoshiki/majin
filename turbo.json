@@ -3,7 +3,10 @@
   "ui": "stream",
   "globalDependencies": [
     "configs/tsconfig/*.json",
-    "configs/biome/biome.json",
+    "configs/oxlint/base.ts",
+    "configs/oxfmt/base.ts",
+    "oxlint.config.ts",
+    "oxfmt.config.ts",
     "Cargo.toml",
     "Cargo.lock",
     "rust-toolchain.toml"

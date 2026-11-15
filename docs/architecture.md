@@ -6,7 +6,7 @@ One PTY implementation, one protocol definition, two frontends that share a Reac
 
 ![Browser and desktop frontends converge on the shared majin-pty crate.](/architecture.svg)
 
-*Both paths converge on the same crate. The desktop build has no server, no port and no authentication because there is nothing between the window and the PTY.*
+_Both paths converge on the same crate. The desktop build has no server, no port and no authentication because there is nothing between the window and the PTY._
 
 ## Repository layout
 
@@ -24,7 +24,8 @@ One PTY implementation, one protocol definition, two frontends that share a Reac
     │   └── terminal-ui/       The xterm.js React component both apps render
     ├── configs/
     │   ├── tsconfig/          Shared TypeScript configs
-    │   └── biome/             Shared Biome config
+    │   ├── oxlint/           Shared Oxlint config
+    │   ├── oxfmt/           Shared Oxfmt config
     └── docs/                  This site
 
 ## The transport seam

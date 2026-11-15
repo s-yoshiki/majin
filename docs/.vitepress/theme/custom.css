@@ -51,14 +51,14 @@
   font-size: 0.9rem;
 }
 
-.vp-doc img[alt*="majin-pty"] {
+.vp-doc img[alt*='majin-pty'] {
   width: 100%;
   margin: 8px 0;
   border: 1px solid var(--vp-c-divider);
   border-radius: 10px;
 }
 
-.vp-doc img[alt*="majin-pty"] + em {
+.vp-doc img[alt*='majin-pty'] + em {
   display: block;
   color: var(--vp-c-text-2);
   font-size: 0.9rem;

@@ -2,8 +2,8 @@
   "name": "@majin/web",
   "version": "0.2.0",
   "private": true,
-  "license": "MIT",
   "description": "Browser frontend, embedded into the majin-server binary at build time",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,16 +14,16 @@
   "dependencies": {
     "@majin/protocol": "workspace:*",
     "@majin/terminal-ui": "workspace:*",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
     "@majin/tsconfig": "workspace:*",
-    "@types/node": "^26.1.2",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^6.0.5",
-    "typescript": "^7.0.2",
-    "vite": "^8.2.0"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }

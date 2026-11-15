@@ -35,13 +35,13 @@
 
 ## ビルドの選び方
 
-| | Webサーバー | デスクトップアプリ |
-| --- | --- | --- |
-| 用途 | ブラウザからシェルへアクセス | ネイティブウィンドウでローカル端末を使用 |
-| 通信方式 | HTTP + WebSocket | Tauri IPC |
-| ネットワーク待受 | デフォルトで `127.0.0.1:8999` | なし |
-| 認証 | アクセストークンをセッションCookieへ交換 | 不要 |
-| 配布形式 | Web UIを埋め込んだ単一バイナリ | `.dmg`、`.msi`、`.AppImage` など |
+|                  | Webサーバー                              | デスクトップアプリ                       |
+| ---------------- | ---------------------------------------- | ---------------------------------------- |
+| 用途             | ブラウザからシェルへアクセス             | ネイティブウィンドウでローカル端末を使用 |
+| 通信方式         | HTTP + WebSocket                         | Tauri IPC                                |
+| ネットワーク待受 | デフォルトで `127.0.0.1:8999`            | なし                                     |
+| 認証             | アクセストークンをセッションCookieへ交換 | 不要                                     |
+| 配布形式         | Web UIを埋め込んだ単一バイナリ           | `.dmg`、`.msi`、`.AppImage` など         |
 
 ## クイックスタート
 
@@ -93,11 +93,11 @@ IPC経由で直接開くため、サーバーの起動やポートの待受は�
 
 必要なツール:
 
-| ツール | バージョン |
-| --- | --- |
-| Node.js | 20以上 |
-| pnpm | 11以上 |
-| Rust | 1.86以上 |
+| ツール  | バージョン |
+| ------- | ---------- |
+| Node.js | 20以上     |
+| pnpm    | 11以上     |
+| Rust    | 1.86以上   |
 
 ```bash
 git clone https://github.com/s-yoshiki/majin.git
@@ -126,15 +126,15 @@ pnpm dev:desktop
 サーバーの各オプションは、コマンドラインフラグと環境変数の両方で指定できます。
 両方を指定した場合はフラグが優先されます。
 
-| フラグ | 環境変数 | デフォルト | 用途 |
-| --- | --- | --- | --- |
-| `--host` | `MAJIN_HOST` | `127.0.0.1` | バインドアドレス |
-| `--port`, `-p` | `MAJIN_PORT` | `8999` | 待受ポート |
-| `--token` | `MAJIN_TOKEN` | 自動生成 | アクセストークン |
-| `--shell` | `MAJIN_SHELL` | `$SHELL` / `%COMSPEC%` | 起動するシェル |
-| `--cwd` | `MAJIN_CWD` | ユーザーのホーム | 初期作業ディレクトリ |
-| `--max-sessions` | `MAJIN_MAX_SESSIONS` | `8` | 同時接続できる端末数 |
-| `--session-ttl-minutes` | `MAJIN_SESSION_TTL_MINUTES` | `720` | セッションの有効期間 |
+| フラグ                  | 環境変数                    | デフォルト             | 用途                 |
+| ----------------------- | --------------------------- | ---------------------- | -------------------- |
+| `--host`                | `MAJIN_HOST`                | `127.0.0.1`            | バインドアドレス     |
+| `--port`, `-p`          | `MAJIN_PORT`                | `8999`                 | 待受ポート           |
+| `--token`               | `MAJIN_TOKEN`               | 自動生成               | アクセストークン     |
+| `--shell`               | `MAJIN_SHELL`               | `$SHELL` / `%COMSPEC%` | 起動するシェル       |
+| `--cwd`                 | `MAJIN_CWD`                 | ユーザーのホーム       | 初期作業ディレクトリ |
+| `--max-sessions`        | `MAJIN_MAX_SESSIONS`        | `8`                    | 同時接続できる端末数 |
+| `--session-ttl-minutes` | `MAJIN_SESSION_TTL_MINUTES` | `720`                  | セッションの有効期間 |
 
 [設定リファレンス](https://s-yoshiki.github.io/majin/configuration.html)では、
 許可Origin、Secure Cookie、ログ、認証関連の設定も確認できます。
@@ -181,7 +181,7 @@ apps/
 packages/
 ├── protocol/          生成された型とトランスポート実装
 └── terminal-ui/       共通のxterm.js Reactコンポーネント
-configs/               TypeScriptとBiomeの共通設定
+configs/               TypeScript、Oxlint、Oxfmtの共通設定
 docs/                  VitePressドキュメントサイト
 ```
 
@@ -192,17 +192,17 @@ docs/                  VitePressドキュメントサイト
 
 ## 開発コマンド
 
-| コマンド | 内容 |
-| --- | --- |
-| `pnpm dev` | RustサーバーとVite Webアプリを起動 |
-| `pnpm dev:desktop` | フロントエンドのホットリロード付きでTauriアプリを起動 |
-| `pnpm build:web` | フロントエンドと、それを埋め込むサーバーバイナリをビルド |
-| `pnpm build:desktop` | `target/release/bundle/` に各プラットフォーム用インストーラーを生成 |
-| `pnpm lint` | BiomeとClippyを警告エラー設定で実行 |
-| `pnpm typecheck` | 全TypeScriptパッケージとRustクレートを型チェック |
-| `pnpm test` | 実PTYを使うテストを含むRustワークスペーステストを実行 |
-| `pnpm test:e2e` | 認証、WebSocket通信、シェルをE2Eテスト |
-| `pnpm generate:protocol` | RustからTypeScriptのプロトコル型を再生成 |
+| コマンド                 | 内容                                                                |
+| ------------------------ | ------------------------------------------------------------------- |
+| `pnpm dev`               | RustサーバーとVite Webアプリを起動                                  |
+| `pnpm dev:desktop`       | フロントエンドのホットリロード付きでTauriアプリを起動               |
+| `pnpm build:web`         | フロントエンドと、それを埋め込むサーバーバイナリをビルド            |
+| `pnpm build:desktop`     | `target/release/bundle/` に各プラットフォーム用インストーラーを生成 |
+| `pnpm lint`              | OxlintとClippyを警告エラー設定で実行                                |
+| `pnpm typecheck`         | 全TypeScriptパッケージとRustクレートを型チェック                    |
+| `pnpm test`              | 実PTYを使うテストを含むRustワークスペーステストを実行               |
+| `pnpm test:e2e`          | 認証、WebSocket通信、シェルをE2Eテスト                              |
+| `pnpm generate:protocol` | RustからTypeScriptのプロトコル型を再生成                            |
 
 Pull Requestを作成する前に、`pnpm lint`、`pnpm typecheck`、`pnpm test` を
 実行してください。`crates/majin-protocol` を変更した場合は、TypeScriptの型も
@@ -210,16 +210,16 @@ Pull Requestを作成する前に、`pnpm lint`、`pnpm typecheck`、`pnpm test`
 
 ## ドキュメント
 
-| ページ | 内容 |
-| --- | --- |
-| [概要](https://s-yoshiki.github.io/majin/ja/) | majinの概要と開始方法 |
-| [開発](https://s-yoshiki.github.io/majin/ja/development.html) | モノレポのセットアップと開発フロー |
-| [デプロイ](https://s-yoshiki.github.io/majin/ja/deployment.html) | systemd、リバースプロキシ、Docker |
-| [デスクトップ版](https://s-yoshiki.github.io/majin/ja/desktop.html) | デスクトップアプリのインストールとビルド |
-| [アーキテクチャ](https://s-yoshiki.github.io/majin/ja/architecture.html) | コンポーネントとデータフロー |
-| [ワイヤープロトコル](https://s-yoshiki.github.io/majin/ja/protocol.html) | フレーム、エンドポイント、終了コード |
-| [セキュリティ](https://s-yoshiki.github.io/majin/ja/security.html) | 認証と信頼境界 |
-| [設定](https://s-yoshiki.github.io/majin/ja/configuration.html) | フラグと環境変数 |
+| ページ                                                                   | 内容                                     |
+| ------------------------------------------------------------------------ | ---------------------------------------- |
+| [概要](https://s-yoshiki.github.io/majin/ja/)                            | majinの概要と開始方法                    |
+| [開発](https://s-yoshiki.github.io/majin/ja/development.html)            | モノレポのセットアップと開発フロー       |
+| [デプロイ](https://s-yoshiki.github.io/majin/ja/deployment.html)         | systemd、リバースプロキシ、Docker        |
+| [デスクトップ版](https://s-yoshiki.github.io/majin/ja/desktop.html)      | デスクトップアプリのインストールとビルド |
+| [アーキテクチャ](https://s-yoshiki.github.io/majin/ja/architecture.html) | コンポーネントとデータフロー             |
+| [ワイヤープロトコル](https://s-yoshiki.github.io/majin/ja/protocol.html) | フレーム、エンドポイント、終了コード     |
+| [セキュリティ](https://s-yoshiki.github.io/majin/ja/security.html)       | 認証と信頼境界                           |
+| [設定](https://s-yoshiki.github.io/majin/ja/configuration.html)          | フラグと環境変数                         |
 
 ## ライセンス
 

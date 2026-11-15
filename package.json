@@ -8,36 +8,40 @@
     "type": "git",
     "url": "https://github.com/s-yoshiki/majin.git"
   },
-  "packageManager": "pnpm@11.15.0",
-  "engines": {
-    "node": ">=20"
-  },
+  "type": "module",
   "scripts": {
+    "build": "turbo run build",
     "dev": "turbo run dev --filter=@majin/web --filter=@majin/server",
+    "typecheck": "turbo run typecheck",
+    "lint": "pnpm lint:js && pnpm lint:rust",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt . && cargo fmt --all",
+    "format:check": "oxfmt --check . && cargo fmt --all --check",
+    "test": "cargo test --workspace",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck",
+    "check:fix": "pnpm lint:fix && pnpm format",
+    "verify": "pnpm check && pnpm test && pnpm build",
     "dev:desktop": "turbo run dev --filter=@majin/desktop",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "build": "turbo run build",
     "build:web": "turbo run build --filter=@majin/server",
     "build:desktop": "turbo run build --filter=@majin/desktop",
-    "typecheck": "turbo run typecheck",
-    "lint": "biome check . && cargo clippy --workspace --all-targets -- -D warnings",
-    "lint:js": "biome check .",
+    "lint:js": "oxlint .",
     "lint:rust": "cargo clippy --workspace --all-targets -- -D warnings",
-    "lint:fix": "biome check --write . && cargo clippy --workspace --fix --allow-dirty",
-    "format": "biome format --write . && cargo fmt --all",
-    "format:check": "biome format . && cargo fmt --all --check",
     "generate:protocol": "turbo run generate --filter=@majin/protocol-rs",
-    "test": "cargo test --workspace",
     "test:e2e": "node scripts/smoke-test.mjs",
     "clean": "turbo run clean && cargo clean"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.6",
-    "@majin/biome-config": "workspace:*",
-    "turbo": "^2.10.7",
-    "typescript": "^7.0.2",
-    "vitepress": "^1.6.4"
-  }
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "vitepress": "catalog:"
+  },
+  "engines": {
+    "node": ">=26.0.0 <27.0.0"
+  },
+  "packageManager": "pnpm@12.20.0"
 }

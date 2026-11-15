@@ -49,12 +49,12 @@ See [Development](./development.md) for the full workflow.
 
 The original version was an Express server, a bare xterm.js page and two shell scripts. It worked, but the two halves of the protocol were written independently — the browser sent `{ resizer: [...] }` while the server read `msg.resize`, so resizing silently did nothing and nothing caught it.
 
-Now the protocol is defined once, in Rust, and the TypeScript types are generated from it. A rename on one side is a compile error on the other. The rest of the rebuild follows from that: a pnpm and Turborepo monorepo, a shared PTY crate, Biome for formatting and linting, and release artifacts built in CI for both targets.
+Now the protocol is defined once, in Rust, and the TypeScript types are generated from it. A rename on one side is a compile error on the other. The rest of the rebuild follows from that: a pnpm and Turborepo monorepo, a shared PTY crate, Oxlint and Oxfmt for linting and formatting, and release artifacts built in CI for both targets.
 
 ## Requirements
 
-| To… | You need |
-|----|----|
-| Run a release binary | Nothing. The frontend is embedded and there is no runtime dependency. |
-| Build from source | Node.js 20+, pnpm 11+, Rust 1.86+ |
+| To…                   | You need                                                                                                                      |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Run a release binary  | Nothing. The frontend is embedded and there is no runtime dependency.                                                         |
+| Build from source     | Node.js 26+, pnpm 12+, Rust 1.86+                                                                                             |
 | Build the desktop app | The above, plus your platform's webview toolchain (Xcode CLT on macOS, WebView2 on Windows, `libwebkit2gtk-4.1-dev` on Linux) |
