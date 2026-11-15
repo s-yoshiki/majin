@@ -7,7 +7,7 @@ The same terminal UI in a native window, talking to a local PTY over Tauri IPC. 
 Download from [Releases](https://github.com/s-yoshiki/majin/releases):
 
 | Platform            | Asset                                      |
-|---------------------|--------------------------------------------|
+| ------------------- | ------------------------------------------ |
 | macOS Apple silicon | `majin_<version>_aarch64.dmg`              |
 | macOS Intel         | `majin_<version>_x64.dmg`                  |
 | Windows             | `majin_<version>_x64-setup.exe` or `.msi`  |
@@ -21,13 +21,13 @@ Releases are not code-signed or notarised. macOS will refuse the first launch �
 
 ## How it differs from the web build
 
-|  | Web | Desktop |
-|----|----|----|
-| Transport | WebSocket over HTTP | Tauri IPC |
-| Authentication | Token, then a session cookie | None — nothing external can reach the PTY |
-| Network exposure | A listening port | None |
-| PTY implementation | `majin-pty`, identical in both |  |
-| Terminal UI | `@majin/terminal-ui`, identical in both |  |
+|                    | Web                                     | Desktop                                   |
+| ------------------ | --------------------------------------- | ----------------------------------------- |
+| Transport          | WebSocket over HTTP                     | Tauri IPC                                 |
+| Authentication     | Token, then a session cookie            | None — nothing external can reach the PTY |
+| Network exposure   | A listening port                        | None                                      |
+| PTY implementation | `majin-pty`, identical in both          |                                           |
+| Terminal UI        | `@majin/terminal-ui`, identical in both |                                           |
 
 ## Building it yourself
 
@@ -50,12 +50,12 @@ Tauri styles the disk-image window by driving Finder with AppleScript, which fai
 
 Four commands and two events, in `apps/desktop/src-tauri/src/lib.rs`:
 
-| Command | Does |
-|----|----|
-| `pty_open(cols, rows)` | Spawns the shell and returns `{ shell, cols, rows }`. Calling it again replaces the previous session rather than leaking it. |
-| `pty_write(data)` | Forwards keystrokes. |
-| `pty_resize(cols, rows)` | Resizes the PTY. Ignored when no session is open, since a resize can race ahead of `pty_open`. |
-| `pty_close()` | Kills the shell. |
+| Command                  | Does                                                                                                                         |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `pty_open(cols, rows)`   | Spawns the shell and returns `{ shell, cols, rows }`. Calling it again replaces the previous session rather than leaking it. |
+| `pty_write(data)`        | Forwards keystrokes.                                                                                                         |
+| `pty_resize(cols, rows)` | Resizes the PTY. Ignored when no session is open, since a resize can race ahead of `pty_open`.                               |
+| `pty_close()`            | Kills the shell.                                                                                                             |
 
 Output arrives on the `pty://output` event and termination on `pty://exit`. `TauriTransport` adapts those into the same `ServerMessage` frames the web build receives, which is why `TerminalView` cannot tell the two apart.
 

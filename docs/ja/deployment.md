@@ -12,13 +12,13 @@
 
 [Releases](https://github.com/s-yoshiki/majin/releases)からプラットフォーム用のアーカイブをダウンロードします。
 
-| プラットフォーム | ファイル |
-|---------------------|---------------------|
-| Linux x86-64 | `majin-<version>-x86_64-unknown-linux-gnu.tar.gz` |
-| Linux ARM64 | `majin-<version>-aarch64-unknown-linux-gnu.tar.gz` |
-| macOS Apple silicon | `majin-<version>-aarch64-apple-darwin.tar.gz` |
-| macOS Intel | `majin-<version>-x86_64-apple-darwin.tar.gz` |
-| Windows x86-64 | `majin-<version>-x86_64-pc-windows-msvc.zip` |
+| プラットフォーム    | ファイル                                           |
+| ------------------- | -------------------------------------------------- |
+| Linux x86-64        | `majin-<version>-x86_64-unknown-linux-gnu.tar.gz`  |
+| Linux ARM64         | `majin-<version>-aarch64-unknown-linux-gnu.tar.gz` |
+| macOS Apple silicon | `majin-<version>-aarch64-apple-darwin.tar.gz`      |
+| macOS Intel         | `majin-<version>-x86_64-apple-darwin.tar.gz`       |
+| Windows x86-64      | `majin-<version>-x86_64-pc-windows-msvc.zip`       |
 
     tar xzf majin-0.2.0-x86_64-unknown-linux-gnu.tar.gz
     sudo install -m 0755 majin /usr/local/bin/
@@ -147,11 +147,11 @@ Caddyなら、追加設定なしで証明書、アップグレード、転送ヘ
 
 ## 問題が起きたとき
 
-| 症状 | 考えられる原因 |
-|----|----|
-| ログインできるが、端末が「再接続中…」のまま | プロキシがWebSocketのアップグレードを転送していません。 |
-| すぐにログイン画面へ戻される | オリジンチェックの失敗（`Host`の書き換え）、またはブラウザーが通常のHTTPと認識する接続で`Secure` Cookieが設定されています。 |
-| `no frontend is embedded in this binary` | `pnpm build:web`ではなく、`cargo`を直接使ってビルドしています。 |
-| 数分アイドルにすると接続が切れる | プロキシの読み取りタイムアウトが短すぎます。 |
+| 症状                                        | 考えられる原因                                                                                                              |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| ログインできるが、端末が「再接続中…」のまま | プロキシがWebSocketのアップグレードを転送していません。                                                                     |
+| すぐにログイン画面へ戻される                | オリジンチェックの失敗（`Host`の書き換え）、またはブラウザーが通常のHTTPと認識する接続で`Secure` Cookieが設定されています。 |
+| `no frontend is embedded in this binary`    | `pnpm build:web`ではなく、`cargo`を直接使ってビルドしています。                                                             |
+| 数分アイドルにすると接続が切れる            | プロキシの読み取りタイムアウトが短すぎます。                                                                                |
 
 `MAJIN_LOG=majin_server=debug`でログレベルを上げられます。

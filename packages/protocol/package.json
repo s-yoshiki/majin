@@ -2,8 +2,8 @@
   "name": "@majin/protocol",
   "version": "0.2.0",
   "private": true,
-  "license": "MIT",
   "description": "Shared wire protocol and transport abstraction for majin",
+  "license": "MIT",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -13,6 +13,6 @@
   },
   "devDependencies": {
     "@majin/tsconfig": "workspace:*",
-    "typescript": "^7.0.2"
+    "typescript": "catalog:"
   }
 }

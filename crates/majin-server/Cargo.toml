@@ -30,6 +30,13 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 sha2 = "0.11"
 subtle = "2"
-tokio = { workspace = true, features = ["rt-multi-thread", "macros", "sync", "signal", "time", "net"] }
+tokio = { workspace = true, features = [
+  "rt-multi-thread",
+  "macros",
+  "sync",
+  "signal",
+  "time",
+  "net",
+] }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }

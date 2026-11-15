@@ -23,7 +23,7 @@ There is no signing key to manage or leak, sessions can be revoked the instant s
 
 Query strings end up in proxy logs, server access logs, browser history and `Referer` headers. A token that grants shell access does not belong in any of them, so the server never accepts one there.
 
-The startup banner instead prints a `#token=…` *fragment* link. Fragments are never sent to a server, so they cannot reach a log. The page reads it, exchanges it for a cookie, and clears it from the address bar with `history.replaceState` before anything else happens.
+The startup banner instead prints a `#token=…` _fragment_ link. Fragments are never sent to a server, so they cannot reach a log. The page reads it, exchanges it for a cookie, and clears it from the address bar with `history.replaceState` before anything else happens.
 
 ::: info The remaining trade-off
 
@@ -46,12 +46,12 @@ Ten failed sign-ins from one address within a minute locks that address out for 
 
 ## What the server does not do
 
-| Not provided | What to do instead |
-|----|----|
-| TLS | Terminate it in front — Caddy, nginx, a cloud load balancer. Over plain HTTP the session cookie and every keystroke travel in clear text. |
-| Multiple users or accounts | There is one token and one shell identity. If you need per-user access, put an authenticating proxy in front and run separate instances. |
-| Sandboxing | The shell runs as the user that started the server, with that user's full environment. Run it as a restricted account, or inside a container, if that is not what you want. |
-| Audit logging of session contents | Connections and lifecycle events are logged; keystrokes and output are not. |
+| Not provided                      | What to do instead                                                                                                                                                          |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TLS                               | Terminate it in front — Caddy, nginx, a cloud load balancer. Over plain HTTP the session cookie and every keystroke travel in clear text.                                   |
+| Multiple users or accounts        | There is one token and one shell identity. If you need per-user access, put an authenticating proxy in front and run separate instances.                                    |
+| Sandboxing                        | The shell runs as the user that started the server, with that user's full environment. Run it as a restricted account, or inside a container, if that is not what you want. |
+| Audit logging of session contents | Connections and lifecycle events are logged; keystrokes and output are not.                                                                                                 |
 
 ## Deployment checklist
 

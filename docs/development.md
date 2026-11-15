@@ -5,7 +5,7 @@ A pnpm workspace and a Cargo workspace in the same repository, with Turborepo ru
 ## Prerequisites
 
 | Tool    | Version | Needed for           |
-|---------|---------|----------------------|
+| ------- | ------- | -------------------- |
 | Node.js | 20+     | Frontend tooling     |
 | pnpm    | 11+     | Workspace management |
 | Rust    | 1.86+   | Everything backend   |
@@ -51,43 +51,38 @@ This rewrites `packages/protocol/src/generated/protocol.ts` and formats it. Comm
 
 ## Checks
 
-| Command | What it does |
-|----|----|
-| `pnpm lint` | Biome on the TypeScript, Clippy on the Rust, warnings denied |
-| `pnpm lint:fix` | Applies what both can fix automatically |
-| `pnpm format` | Biome formatter and `cargo fmt` |
-| `pnpm typecheck` | `tsc --noEmit` per package, `cargo check` per crate |
-| `pnpm test` | `cargo test --workspace`. Includes tests that spawn a real PTY and assert on what the shell sees. |
-| `pnpm build` | Everything, in dependency order |
+| Command          | What it does                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
+| `pnpm lint`      | Oxlint on the TypeScript, Clippy on the Rust, warnings denied                                     |
+| `pnpm lint:fix`  | Applies what both can fix automatically                                                           |
+| `pnpm format`    | Oxfmt and `cargo fmt`                                                                             |
+| `pnpm typecheck` | `tsc --noEmit` per package, `cargo check` per crate                                               |
+| `pnpm test`      | `cargo test --workspace`. Includes tests that spawn a real PTY and assert on what the shell sees. |
+| `pnpm build`     | Everything, in dependency order                                                                   |
 
 ## Where things live
 
-| To change… | Edit |
-|----|----|
-| How the terminal looks or behaves, in both apps | `packages/terminal-ui/src/TerminalView.tsx` |
-| The colour scheme | `packages/terminal-ui/src/theme.ts` |
-| Shell spawning, resizing, output decoding | `crates/majin-pty/src/lib.rs` |
-| Authentication | `crates/majin-server/src/auth.rs` |
-| Server routes | `crates/majin-server/src/main.rs` |
-| Desktop IPC commands | `apps/desktop/src-tauri/src/lib.rs` |
-| The app icon | `apps/desktop/scripts/generate-icon.mjs`, then `pnpm --filter @majin/desktop icon` |
+| To change…                                      | Edit                                                                               |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------- |
+| How the terminal looks or behaves, in both apps | `packages/terminal-ui/src/TerminalView.tsx`                                        |
+| The colour scheme                               | `packages/terminal-ui/src/theme.ts`                                                |
+| Shell spawning, resizing, output decoding       | `crates/majin-pty/src/lib.rs`                                                      |
+| Authentication                                  | `crates/majin-server/src/auth.rs`                                                  |
+| Server routes                                   | `crates/majin-server/src/main.rs`                                                  |
+| Desktop IPC commands                            | `apps/desktop/src-tauri/src/lib.rs`                                                |
+| The app icon                                    | `apps/desktop/scripts/generate-icon.mjs`, then `pnpm --filter @majin/desktop icon` |
 
 ## Shared configuration
 
-TypeScript and Biome settings live in `configs/` as workspace packages rather than being copied per app.
+TypeScript, Oxlint, and Oxfmt settings live under `configs/` and are shared across workspaces.
 
     configs/tsconfig/base.json        strict defaults, no DOM
     configs/tsconfig/node.json        + Node types
     configs/tsconfig/react-lib.json   + DOM and JSX
     configs/tsconfig/react-app.json   + Vite client types
-    configs/biome/base.json           formatter and lint rules
+    configs/oxlint/base.ts            lint rules
+    configs/oxfmt/base.ts             formatter rules
 
 A package opts in by extending it:
 
     { "extends": "@majin/tsconfig/react-app.json", "include": ["src"] }
-
-::: info One thing to know about Biome
-
-The shared config is `base.json`, not `biome.json`, on purpose. Biome auto-discovers any file named `biome.json` and would treat the shared one as a competing root configuration.
-
-:::
