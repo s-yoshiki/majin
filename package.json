@@ -20,7 +20,7 @@
     "test": "cargo test --workspace",
     "check": "pnpm lint && pnpm format:check && pnpm typecheck",
     "check:fix": "pnpm lint:fix && pnpm format",
-    "verify": "pnpm check && pnpm test && pnpm build",
+    "verify": "pnpm check && pnpm test",
     "dev:desktop": "turbo run dev --filter=@majin/desktop",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",

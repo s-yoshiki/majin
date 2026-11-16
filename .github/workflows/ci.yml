@@ -43,20 +43,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Oxlint
-        run: pnpm run lint:js
-
-      - name: rustfmt
-        run: cargo fmt --all --check
-
-      - name: Clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
-
-      - name: TypeScript
-        run: pnpm run typecheck
-
-      - name: Rust tests
-        run: cargo test --workspace
+      - name: Verify
+        run: pnpm verify
 
       # The TypeScript protocol types are generated from the Rust ones. If this
       # step fails, run `pnpm generate:protocol` and commit the result.
